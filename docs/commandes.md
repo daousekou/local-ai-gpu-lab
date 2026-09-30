@@ -49,12 +49,28 @@ python scripts/check_transformers.py
 jupyter lab
 ```
 
+## Tester Docker
+
+```bash
+docker run hello-world
+docker run --rm --gpus all nvidia/cuda:12.8.1-base-ubuntu24.04 nvidia-smi
+```
+
+## Tester un pipeline Transformers
+
+```python
+from transformers import pipeline
+
+classifier = pipeline("sentiment-analysis", device=0)
+print(classifier("ROS 2 and robotics are fascinating."))
+```
+
 ## Ollama
 
 Apres installation officielle d'Ollama :
 
 ```bash
 ollama --version
-ollama pull llama3.2
-ollama run llama3.2
+ollama pull qwen3:4b
+ollama run qwen3:4b
 ```

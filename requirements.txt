@@ -5,4 +5,10 @@ matplotlib
 transformers
 accelerate
 datasets
+safetensors
+sentencepiece
+opencv-python
 ultralytics
+bitsandbytes
+peft
+trl

@@ -9,8 +9,9 @@ Ce depot est volontairement generique. Il ne contient aucun secret, aucun chemin
 - Creer un environnement Python isole avec `venv`.
 - Installer PyTorch avec support GPU CUDA lorsque le materiel est compatible.
 - Tester l'acces GPU depuis Python.
+- Verifier Docker avec un conteneur de test et un conteneur CUDA.
 - Utiliser JupyterLab pour les notebooks.
-- Preparer une base pour Transformers, YOLO et Ollama.
+- Preparer une base pour Transformers, Datasets, Accelerate, YOLO, OpenCV, PEFT, TRL, bitsandbytes et Ollama.
 - Documenter les commandes, les tests et les avertissements de securite.
 
 ## Architecture
@@ -86,6 +87,22 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 
 Si aucun GPU compatible n'est disponible, utiliser l'installation CPU indiquee par PyTorch.
 
+## Verification Docker et GPU
+
+Verifier Docker :
+
+```bash
+docker run hello-world
+```
+
+Tester un conteneur CUDA NVIDIA :
+
+```bash
+docker run --rm --gpus all nvidia/cuda:12.8.1-base-ubuntu24.04 nvidia-smi
+```
+
+Si la commande affiche le GPU, Docker peut lancer des conteneurs capables d'utiliser l'acceleration materielle.
+
 ## Tests rapides
 
 Verifier Python :
@@ -112,6 +129,59 @@ Lancer JupyterLab :
 ```bash
 jupyter lab
 ```
+
+## Hugging Face
+
+Les bibliotheques principales sont :
+
+- `transformers` pour charger et utiliser des modeles pre-entraines ;
+- `datasets` pour manipuler les jeux de donnees ;
+- `accelerate` pour simplifier l'execution CPU/GPU ;
+- `safetensors` pour charger des poids de modeles dans un format plus sur ;
+- `sentencepiece` pour certains tokenizers.
+
+Exemple de test :
+
+```python
+from transformers import pipeline
+
+classifier = pipeline("sentiment-analysis", device=0)
+print(classifier("ROS 2 and robotics are fascinating."))
+```
+
+## Fine-tuning
+
+Le depot prepare aussi une base pour etudier :
+
+- LoRA / QLoRA avec `peft` ;
+- entrainement et adaptation de modeles avec `trl` ;
+- quantification 8 bits ou 4 bits avec `bitsandbytes`.
+
+Ces approches permettent de reduire les besoins memoire lors d'experiences sur des GPU limites.
+
+## Vision par ordinateur
+
+OpenCV et Ultralytics permettent de preparer des projets de vision :
+
+```python
+import cv2
+from ultralytics import YOLO
+```
+
+YOLO peut ensuite servir a la detection d'objets, la segmentation, la classification ou le suivi.
+
+## Ollama
+
+Ollama permet d'executer localement des modeles de langage quantifies.
+
+Exemple generique :
+
+```bash
+ollama pull qwen3:4b
+ollama run qwen3:4b
+```
+
+Selon le GPU disponible, une partie ou la totalite du modele peut etre chargee en memoire video.
 
 ## Securite
 
